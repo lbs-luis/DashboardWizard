@@ -18,6 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { SaleDetailSkeleton } from './sale-details-skeleton'
 
 export interface OrderDetailsProps {
   orderId: string
@@ -31,30 +32,26 @@ export function SaleDetails({ orderId, open }: OrderDetailsProps) {
     enabled: open,
   })
 
-  if (!order) {
-    return null
-  }
-
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Pedido: {order.id}</DialogTitle>
+        <DialogTitle>Pedido: {orderId}</DialogTitle>
         <DialogDescription>Detalhes do pedido</DialogDescription>
       </DialogHeader>
 
-      {order && (
+      {order ? (
         <div className="space-y-6">
           <Table>
             <TableBody>
               <TableRow>
                 <TableCell className="text-muted-foreground">Status</TableCell>
-                <TableCell className="flex - justify-end">
+                <TableCell className="flex justify-end">
                   <OrderStatus status={order.status} />
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="text-muted-foreground">Cliente</TableCell>
-                <TableCell className="flex - justify-end">
+                <TableCell className="flex justify-end">
                   {order.customer.name}
                 </TableCell>
               </TableRow>
@@ -62,13 +59,13 @@ export function SaleDetails({ orderId, open }: OrderDetailsProps) {
                 <TableCell className="text-muted-foreground">
                   Telefone
                 </TableCell>
-                <TableCell className="flex - justify-end">
+                <TableCell className="flex justify-end">
                   {order.customer.phone ?? 'Não informado'}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="text-muted-foreground">E-mail</TableCell>
-                <TableCell className="flex - justify-end">
+                <TableCell className="flex justify-end">
                   {order.customer.email}
                 </TableCell>
               </TableRow>
@@ -76,7 +73,7 @@ export function SaleDetails({ orderId, open }: OrderDetailsProps) {
                 <TableCell className="text-muted-foreground">
                   Realizado há
                 </TableCell>
-                <TableCell className="flex - justify-end">
+                <TableCell className="flex justify-end">
                   {formatDistanceToNow(order.createdAt, {
                     locale: ptBR,
                     addSuffix: true,
@@ -107,7 +104,7 @@ export function SaleDetails({ orderId, open }: OrderDetailsProps) {
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    {((item.priceInCents / 100) * item.quantity).toLocaleString(
+                    {((item.priceInCents * item.quantity) / 100).toLocaleString(
                       'pt-BR',
                       {
                         style: 'currency',
@@ -131,6 +128,8 @@ export function SaleDetails({ orderId, open }: OrderDetailsProps) {
             </TableFooter>
           </Table>
         </div>
+      ) : (
+        <SaleDetailSkeleton />
       )}
     </DialogContent>
   )
