@@ -9,27 +9,35 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { getProfile } from '@/api/get-profile'
-import { getManagedStore } from '@/api/get-managed-store'
+// import { getProfile } from '@/api/get-profile'
+// import { getManagedStore } from '@/api/get-managed-store'
 import { Skeleton } from './ui/skeleton'
 import { Dialog, DialogTrigger } from './ui/dialog'
 import { StoreProfileDialog } from './store-profile-dialog'
 import { signOut } from '@/api/sign-out'
 import { useNavigate } from 'react-router-dom'
+import { connectToApi } from '@/api/connect-to-api'
 
 export function AccountMenu() {
   const navigate = useNavigate()
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
+  const { data } = useQuery({
+    queryKey: ['connect'],
+    queryFn: connectToApi,
   })
 
-  const { data: managedStore, isLoading: isManagedStoreLoading } = useQuery({
-    queryKey: ['managed-store'],
-    queryFn: getManagedStore,
-    staleTime: Infinity,
-  })
+  console.log(data)
+
+  // const { data: profile, isLoading: isProfileLoading } = useQuery({
+  //   queryKey: ['profile'],
+  //   queryFn: getProfile,
+  // })
+
+  // const { data: managedStore, isLoading: isManagedStoreLoading } = useQuery({
+  //   queryKey: ['managed-store'],
+  //   queryFn: getManagedStore,
+  //   staleTime: Infinity,
+  // })
 
   const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
     mutationFn: signOut,
@@ -46,17 +54,18 @@ export function AccountMenu() {
             variant="outline"
             className="flex items-center gap-2 select-none"
           >
-            {isManagedStoreLoading ? (
+            <Skeleton className="h-4 w-10" />
+            {/* {isManagedStoreLoading ? (
               <Skeleton className="h-4 w-10" />
             ) : (
               managedStore?.name
-            )}
+            )} */}
             <ChevronDown className="h-4 w-10" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel className="flex flex-col">
-            {isProfileLoading ? (
+            {/* {isProfileLoading ? (
               <div className="space-y-1.5">
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
@@ -68,7 +77,11 @@ export function AccountMenu() {
                   {profile?.email}
                 </span>
               </>
-            )}
+            )} */}
+            <div className="space-y-1.5">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
