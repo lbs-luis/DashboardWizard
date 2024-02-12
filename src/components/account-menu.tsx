@@ -13,7 +13,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 // import { getManagedStore } from '@/api/get-managed-store'
 import { Skeleton } from './ui/skeleton'
 import { Dialog, DialogTrigger } from './ui/dialog'
-import { StoreProfileDialog } from './store-profile-dialog'
+// import { StoreProfileDialog } from './store-profile-dialog'
 import { signOut } from '@/api/sign-out'
 import { useNavigate } from 'react-router-dom'
 import { connectToApi } from '@/api/connect-to-api'
@@ -103,7 +103,7 @@ export function AccountMenu() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <StoreProfileDialog />
+      {/* <StoreProfileDialog /> */}
     </Dialog>
   )
 }
