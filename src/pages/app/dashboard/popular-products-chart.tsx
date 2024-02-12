@@ -1,25 +1,25 @@
-// import { getPopularProducts } from '@/api/get-popular-products'
+import { getPopularProducts } from '@/api/get-popular-products'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-// import { useQuery } from '@tanstack/react-query'w
+import { useQuery } from '@tanstack/react-query'
 import { BarChart, Loader2 } from 'lucide-react'
 
-// import { ResponsiveContainer, Cell, Pie, PieChart } from 'recharts'
+import { ResponsiveContainer, Cell, Pie, PieChart } from 'recharts'
 
-// import colors from 'tailwindcss/colors'
+import colors from 'tailwindcss/colors'
 
-// const COLORS = [
-//   colors.sky[500],
-//   colors.amber[500],
-//   colors.emerald[500],
-//   colors.violet[500],
-//   colors.rose[500],
-// ]
+const COLORS = [
+  colors.sky[500],
+  colors.amber[500],
+  colors.emerald[500],
+  colors.violet[500],
+  colors.rose[500],
+]
 
 export function PopularProductsChart() {
-  // const { data: popularProducts } = useQuery({
-  //   queryKey: ['metrics', 'popular-products'],
-  //   queryFn: getPopularProducts,
-  // })
+  const { data: popularProducts } = useQuery({
+    queryKey: ['metrics', 'popular-products'],
+    queryFn: getPopularProducts,
+  })
   return (
     <Card className="md:col-span-3">
       <CardHeader className="pb-3">
@@ -32,10 +32,7 @@ export function PopularProductsChart() {
       </CardHeader>
 
       <CardContent>
-        <div className="flex h-[240px] w-full items-center justify-center">
-          <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-        </div>
-        {/* {popularProducts ? (
+        {popularProducts ? (
           <ResponsiveContainer width="100%" height={240}>
             <PieChart style={{ fontSize: 12 }}>
               <Pie
@@ -96,7 +93,7 @@ export function PopularProductsChart() {
           <div className="flex h-[240px] w-full items-center justify-center">
             <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
           </div>
-        )} */}
+        )}
       </CardContent>
     </Card>
   )
