@@ -49,6 +49,20 @@ export function NavDropDownMenu() {
             Vendas
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            to="/sales"
+            className={`flex flex-row gap-2 ${
+              pathname === '/sales'
+                ? 'text-foreground'
+                : 'text-muted-foreground'
+            }`}
+            data-current={pathname === '/products'}
+          >
+            <PackageSearch className="h-4 w-4" />
+            Produtos
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

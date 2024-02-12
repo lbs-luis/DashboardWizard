@@ -8,6 +8,7 @@ import { SignUp } from './pages/auth/sing-up'
 import { Sales } from './pages/app/sales/sales'
 import { NotFound } from './pages/404'
 import { Error } from './pages/error'
+import { Products } from './pages/app/products/products'
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: '/sales',
         element: <Sales />,
+      },
+      {
+        path: '/products',
+        element: <Products />,
       },
     ],
   },

@@ -22,6 +22,10 @@ export function Header() {
             <PackageSearch className="h-4 w-4" />
             Vendas
           </NavLink>
+          <NavLink to="/products">
+            <PackageSearch className="h-4 w-4" />
+            Produtos
+          </NavLink>
         </nav>
         <div className="md:hidden">
           <NavDropDownMenu />
