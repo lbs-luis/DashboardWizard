@@ -1,7 +1,6 @@
 import { TableCell, TableRow } from '@/components/ui/table'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useState } from 'react'
 
 export interface ProductTableRowProps {
   product: {
