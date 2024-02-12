@@ -3,17 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 // import { useQuery } from '@tanstack/react-query'w
 import { BarChart, Loader2 } from 'lucide-react'
 
-import { ResponsiveContainer, Cell, Pie, PieChart } from 'recharts'
+// import { ResponsiveContainer, Cell, Pie, PieChart } from 'recharts'
 
-import colors from 'tailwindcss/colors'
+// import colors from 'tailwindcss/colors'
 
-const COLORS = [
-  colors.sky[500],
-  colors.amber[500],
-  colors.emerald[500],
-  colors.violet[500],
-  colors.rose[500],
-]
+// const COLORS = [
+//   colors.sky[500],
+//   colors.amber[500],
+//   colors.emerald[500],
+//   colors.violet[500],
+//   colors.rose[500],
+// ]
 
 export function PopularProductsChart() {
   // const { data: popularProducts } = useQuery({
