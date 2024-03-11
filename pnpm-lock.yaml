@@ -47,6 +47,9 @@ dependencies:
   install:
     specifier: ^0.13.0
     version: 0.13.0
+  jwt-encode:
+    specifier: ^1.0.1
+    version: 1.0.1
   localforage:
     specifier: ^1.10.0
     version: 1.10.0
@@ -2123,6 +2126,12 @@ packages:
     hasBin: true
     dev: true
 
+  /jwt-encode@1.0.1:
+    resolution: {integrity: sha512-QrGiNhynbAYyFdbC1GbjborzenSFs5Ga+2nE0uBokGXsH11xrgd1AX55HR7P+wGQyyZOn6LUO5iKlh74dlhBkA==}
+    dependencies:
+      ts.cryptojs256: 1.0.1
+    dev: false
+
   /lie@3.1.1:
     resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==}
     dependencies:
@@ -2848,6 +2857,10 @@ packages:
 
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  /ts.cryptojs256@1.0.1:
+    resolution: {integrity: sha512-9XtEgRVOZBCdpPcCEhfvv9I2AVXdvfI81I/KpFM0wEfbq5JVHlXH7bfIjGQmYrIHGiBEHKsIaStQ87k926J7dA==}
+    dev: false
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}

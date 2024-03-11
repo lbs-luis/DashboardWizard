@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { signIn } from '@/api/sign-in'
 
@@ -16,6 +16,7 @@ type SignInForm = z.infer<typeof signInForm>
 
 export function SignIn() {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -33,8 +34,9 @@ export function SignIn() {
 
   async function handleSignin(data: SignInForm) {
     try {
-      await authenticate({ email: data.email })
-      toast.success('O 🧙‍♀️ enviou um link MAGICO🪄 para seu e-mail.')
+      await authenticate({ email: data.email }).then(() =>
+        navigate('/', { replace: true }),
+      )
     } catch {
       toast.error('Credenciais inválidas.')
     }
