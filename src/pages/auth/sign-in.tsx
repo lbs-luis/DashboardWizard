@@ -34,9 +34,7 @@ export function SignIn() {
 
   async function handleSignin(data: SignInForm) {
     try {
-      await authenticate({ email: data.email }).then(() =>
-        navigate('/', { replace: true }),
-      )
+      await authenticate({ email: data.email })
     } catch {
       toast.error('Credenciais inválidas.')
     }
