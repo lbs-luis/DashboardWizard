@@ -23,10 +23,17 @@ Aplicado nesse projeto o pattern Magic Link de autenticação onde apenas com o 
 ## 🚀 Instalando o Dashboard Wizard 🧙‍♂️.
 
 Para clonar e executar o projeto, siga estas etapas:
+> o projeto foi originalmente construido usando [pnpm](https://pnpm.io/pt/)
 
 clonando o projeto
 ```
-git clone
+git clone https://github.com/luis-lbs/DashboardWizard.git
+```
+<br>
+
+baixando dependências
+```
+pnpm install
 ```
 <br>
 
@@ -39,9 +46,10 @@ VITE_ENABLE_API_DELAY=0 - delay em ms desejado para o retorno das requisições
 
 executando o projeto
 ```
-npm run dev
+pnpm run dev
 ```
 <br>
+
 ## DashboardWizard-api
 
 [Veja](https://github.com/luis-lbs/DashboardWizard-api) a API construida usando [Bun](https://bun.sh/) que dá vida ao Dashboard Wizard 🧙‍♂️.
