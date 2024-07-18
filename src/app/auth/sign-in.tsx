@@ -8,9 +8,11 @@ import { toast } from 'sonner'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { signIn } from '@/api/sign-in'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const signInForm = z.object({
   email: z.string().email(),
+  password: z.string().min(6),
 })
 type SignInForm = z.infer<typeof signInForm>
 
@@ -21,11 +23,9 @@ export function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<SignInForm>({
-    defaultValues: {
-      email: searchParams.get('email') ?? '',
-    },
+    resolver: zodResolver(signInForm),
   })
 
   const { mutateAsync: authenticate } = useMutation({
@@ -34,8 +34,8 @@ export function SignIn() {
 
   async function handleSignin(data: SignInForm) {
     try {
-      await authenticate({ email: data.email }).then(() => {
-        toast.success('O 🧙‍♂️ enviou um link para o seu e-mail.')
+      await authenticate(data).then(() => {
+        navigate('/', { replace: true })
       })
     } catch {
       toast.error('Credenciais inválidas.')
@@ -64,9 +64,16 @@ export function SignIn() {
             onSubmit={handleSubmit(handleSignin)}
             className="space-y-4 gap-4"
           >
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
+              <Input type="email" {...register('email')} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Sua senha</Label>
+              <Input type="password" {...register('password')} />
+              <span className="text-sm text-rose-600">
+                {errors?.password?.message}
+              </span>
             </div>
             <Button disabled={isSubmitting} className="w-full" type="submit">
               Acessar painel

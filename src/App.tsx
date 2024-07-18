@@ -10,7 +10,7 @@ import { queryClient } from './lib/react-query'
 export function App() {
   return (
     <HelmetProvider>
-      <ThemeProvider storageKey="dw-theme" defaultTheme="dark">
+      <ThemeProvider storageKey="dw-theme" defaultTheme="light">
         <Helmet titleTemplate="%s | D.Wizard" />
         <Toaster richColors />
         <QueryClientProvider client={queryClient}>

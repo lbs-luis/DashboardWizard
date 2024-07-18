@@ -7,15 +7,22 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { registerStore } from '@/api/register-store'
+import { registerStoreAndManager } from '@/api/register-store-and-manager'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const signUpForm = z.object({
-  establishmentName: z.string(),
+  storeName: z.string(),
+  storeDescription: z.string(),
+  storeCustomId: z.string().regex(/^[a-zA-Z0-9-_]+$/, {
+    message: "ID deve conter apenas letras, números, '-' e '_', sem espaços.",
+  }),
   managerName: z.string(),
-  phone: z.string(),
-  email: z.string().email(),
+  managerEmail: z.string().email(),
+  managerPassword: z.string().min(6, {
+    message: 'Uma senha segura deve ter pelo menos 6 caracteres',
+  }),
 })
-type signUpForm = z.infer<typeof signUpForm>
+type SignUpForm = z.infer<typeof signUpForm>
 
 export function SignUp() {
   const navigate = useNavigate()
@@ -23,25 +30,31 @@ export function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<signUpForm>()
+    formState: { isSubmitting, errors },
+  } = useForm<SignUpForm>({ resolver: zodResolver(signUpForm) })
 
   const { mutateAsync: registerStoreFn } = useMutation({
-    mutationFn: registerStore,
+    mutationFn: registerStoreAndManager,
   })
 
-  async function handlesignUp({
-    establishmentName,
-    email,
-    managerName,
-    phone,
-  }: signUpForm) {
+  async function handlesignUp(data: SignUpForm) {
+    const {
+      managerEmail,
+      storeDescription,
+      managerPassword,
+      storeCustomId,
+      storeName,
+      managerName,
+    } = data
+
     try {
       await registerStoreFn({
-        storeName: establishmentName,
+        managerEmail,
+        storeDescription,
+        managerPassword,
+        storeCustomId,
+        storeName,
         managerName,
-        phone,
-        email,
       })
       toast.success('Estabelecimento cadastrado com sucesso!', {
         action: {
@@ -75,29 +88,35 @@ export function SignUp() {
             onSubmit={handleSubmit(handlesignUp)}
             className="space-y-4 gap-4"
           >
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Nome do estabelecimento</Label>
-              <Input
-                id="establishmentName"
-                type="text"
-                {...register('establishmentName')}
-              />
+              <Input type="text" {...register('storeName')} />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Seu nome</Label>
-              <Input
-                id="managerName"
-                type="text"
-                {...register('managerName')}
-              />
+              <Input type="text" {...register('managerName')} />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
+              <Input type="email" {...register('managerEmail')} />
             </div>
-            <div className="space-y-2">
-              <Label>Seu numero de celular</Label>
-              <Input id="phone" type="tel" {...register('phone')} />
+            <div className="flex flex-col gap-2">
+              <Label>Crie uma senha segura</Label>
+              <Input type="password" {...register('managerPassword')} />
+              <span className="text-sm text-rose-600">
+                {errors?.managerPassword?.message}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Que tal um solgan para o seu negócio</Label>
+              <Input type="text" {...register('storeDescription')} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>ID Customizado da Loja</Label>
+              <Input type="text" {...register('storeCustomId')} />
+              <span className="text-sm text-rose-600">
+                {errors?.storeCustomId?.message}
+              </span>
             </div>
             <Button disabled={isSubmitting} className="w-full" type="submit">
               Criar perfil
