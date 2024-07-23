@@ -10,5 +10,5 @@ interface RegisterStoreBody {
 }
 
 export async function registerStoreAndManager(reqBody: RegisterStoreBody) {
-  await api.post('/sign-up/store', reqBody)
+  return await api.post('/auth/sign-up/store', reqBody)
 }

@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from './ui/button'
 import {
   DialogClose,
@@ -11,12 +10,11 @@ import {
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
-import { ManagedStore, getManagedStore } from '@/api/get-managed-store'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { updateProfile } from '@/api/update-profile'
 import { toast } from 'sonner'
+import useStoreState from '@/lib/data/storeState'
 
 const storeProfileSchema = z.object({
   name: z.string().min(1),
@@ -25,11 +23,8 @@ const storeProfileSchema = z.object({
 type StoreProfileSchema = z.infer<typeof storeProfileSchema>
 
 export function StoreProfileDialog() {
-  const { data: managedStore } = useQuery({
-    queryKey: ['managed-store'],
-    queryFn: getManagedStore,
-    staleTime: Infinity,
-  })
+  // const { user } = useUserState()
+  const { store } = useStoreState()
 
   const {
     register,
@@ -38,39 +33,26 @@ export function StoreProfileDialog() {
   } = useForm<StoreProfileSchema>({
     resolver: zodResolver(storeProfileSchema),
     values: {
-      name: managedStore?.name ?? '',
-      description: managedStore?.description ?? '',
+      name: store.name,
+      description: store.description,
     },
   })
 
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
 
-  function updateManagedStoreCache({ name, description }: StoreProfileSchema) {
-    const cached = queryClient.getQueryData<ManagedStore>(['managed-store'])
-    if (cached)
-      queryClient.setQueryData<ManagedStore>(['managed-store'], {
-        ...cached,
-        name,
-        description,
-      })
-    return { cached }
-  }
+  // function updateManagedStoreCache({ name, description }: StoreProfileSchema) {
+  //   const cached = queryClient.getQueryData<ManagedStore>(['managed-store'])
+  //   if (cached)
+  //     queryClient.setQueryData<ManagedStore>(['managed-store'], {
+  //       ...cached,
+  //       name,
+  //       description,
+  //     })
+  //   return { cached }
+  // }
 
-  const { mutateAsync: updateProfileFn } = useMutation({
-    mutationFn: updateProfile,
-    onMutate({ name, description }) {
-      const { cached } = updateManagedStoreCache({ name, description })
-      return { prev: cached }
-    },
-    onError(_, __, context) {
-      if (context?.prev) updateManagedStoreCache(context.prev)
-    },
-  })
-
-  async function handleUpdateProfile(data: StoreProfileSchema) {
+  async function handleUpdateProfile() {
     try {
-      await updateProfileFn(data)
-
       toast.success('Perfil atualizado com sucesso!')
     } catch {
       toast.error('Falha ao atualizar o perfil, tente novamente mais tarde.')

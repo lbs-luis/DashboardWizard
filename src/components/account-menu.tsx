@@ -8,28 +8,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { getProfile } from '@/api/get-profile'
-import { getManagedStore } from '@/api/get-managed-store'
-import { Skeleton } from './ui/skeleton'
+import { useMutation } from '@tanstack/react-query'
 import { Dialog, DialogTrigger } from './ui/dialog'
 import { StoreProfileDialog } from './store-profile-dialog'
-import { signOut } from '@/api/sign-out'
+import { signOut } from '@/api/auth/sign-out'
 import { useNavigate } from 'react-router-dom'
+import useUserState from '@/lib/data/userState'
+import useStoreState from '@/lib/data/storeState'
 
 export function AccountMenu() {
   const navigate = useNavigate()
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
-  })
-
-  const { data: managedStore, isLoading: isManagedStoreLoading } = useQuery({
-    queryKey: ['managed-store'],
-    queryFn: getManagedStore,
-    staleTime: Infinity,
-  })
+  const { user } = useUserState()
+  const { store } = useStoreState()
 
   const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
     mutationFn: signOut,
@@ -46,29 +37,18 @@ export function AccountMenu() {
             variant="outline"
             className="flex items-center gap-2 select-none"
           >
-            {isManagedStoreLoading ? (
-              <Skeleton className="h-4 w-10" />
-            ) : (
-              managedStore?.name
-            )}
+            {store.name}
             <ChevronDown className="h-4 w-10" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel className="flex flex-col">
-            {isProfileLoading ? (
-              <div className="space-y-1.5">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-              </div>
-            ) : (
-              <>
-                <span>{profile?.name}</span>
-                <span className="text-xs font-normal text-muted-foreground">
-                  {profile?.email}
-                </span>
-              </>
-            )}
+            <>
+              <span>{user.name}</span>
+              <span className="text-xs font-normal text-muted-foreground">
+                {user.email}
+              </span>
+            </>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>

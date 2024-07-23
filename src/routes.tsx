@@ -1,14 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import { Dashboard } from './app/components/dashboard/dashboard'
+import { Dashboard } from './app/pages/dashboard/dashboard'
 import { SignIn } from './app/auth/sign-in'
 import { AppLayout } from './app/_layouts/app'
 import { AuthLayout } from './app/_layouts/auth'
 import { SignUp } from './app/auth/sing-up'
-import { Sales } from './app/components/sales/sales'
+import { Sales } from './app/pages/sales/sales'
 import { NotFound } from './app/404'
 import { Error } from './app/error'
-import { Products } from './app/components/products/products'
+import { Products } from './app/pages/products/products'
 
 export const router = createBrowserRouter([
   {

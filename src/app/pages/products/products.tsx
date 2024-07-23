@@ -7,13 +7,13 @@ import {
 } from '@/components/ui/table'
 import { Helmet } from 'react-helmet-async'
 import { ProductTableRow } from './product-table-row'
-import { ProductTableFilters } from './product-table-filters'
 import { Pagination } from '@/components/pagination'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { ProductTableSkeleton } from './product-table-skeleton'
 import { getProducts } from '@/api/get-products'
+import { ProductTableButtons } from './product-table-buttons'
 
 export function Products() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -48,7 +48,7 @@ export function Products() {
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Produtos</h1>
         <div className="space-y-2.5">
-          <ProductTableFilters />
+          <ProductTableButtons />
           <div className="border rounded-md">
             <Table>
               <TableHeader>
@@ -74,14 +74,14 @@ export function Products() {
               </TableBody>
             </Table>
           </div>
-          {result && (
+          {/* {result && (
             <Pagination
               pageIndex={result.meta.pageIndex}
               totalCount={result.meta.totalCount}
               perPage={result.meta.perPage}
               onPageChange={handlePaginate}
             />
-          )}
+          )} */}
         </div>
       </div>
     </>

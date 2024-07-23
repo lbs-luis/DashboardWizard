@@ -7,8 +7,9 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { registerStoreAndManager } from '@/api/register-store-and-manager'
+import { registerStoreAndManager } from '@/api/auth/register-store-and-manager'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from '@/api/auth/sign-in'
 
 const signUpForm = z.object({
   storeName: z.string(),
@@ -37,6 +38,14 @@ export function SignUp() {
     mutationFn: registerStoreAndManager,
   })
 
+  async function handleSignIn(email: string, password: string) {
+    await signIn({ email, password })
+      .then((_) => {
+        navigate('/', { replace: true })
+      })
+      .catch((error) => toast.error(error.message))
+  }
+
   async function handlesignUp(data: SignUpForm) {
     const {
       managerEmail,
@@ -47,24 +56,25 @@ export function SignUp() {
       managerName,
     } = data
 
-    try {
-      await registerStoreFn({
-        managerEmail,
-        storeDescription,
-        managerPassword,
-        storeCustomId,
-        storeName,
-        managerName,
+    await registerStoreFn({
+      managerEmail,
+      storeDescription,
+      managerPassword,
+      storeCustomId,
+      storeName,
+      managerName,
+    })
+      .then((_) => {
+        toast.success('Loja cadastrada com sucesso!', {
+          action: {
+            label: 'Entrar',
+            onClick: () => handleSignIn(managerEmail, managerPassword),
+          },
+        })
       })
-      toast.success('Estabelecimento cadastrado com sucesso!', {
-        action: {
-          label: 'Entrar',
-          onClick: () => navigate(`/sign-in?email=${email}`),
-        },
+      .catch((error) => {
+        toast.error(error.message)
       })
-    } catch {
-      toast.error('Erro ao criar o cadastro do seu etabelecimento.')
-    }
   }
 
   return (
