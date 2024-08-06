@@ -56,13 +56,17 @@ export function SignIn() {
 
   async function handleSignin(data: SignInForm) {
     await authenticate(data)
-      .then(async (_) => {
+      .then(async (response) => {        
+        localStorage.setItem('authToken', response.data.token)
+        
         await profile()
           .then((profileData) => {
             const { name, created_at, email, id, role } = profileData.data.user
             updateUser({ email, created_at, role, name, id })
           })
-          .catch((error) => toast.error(error.message))
+          .catch((error) => {            
+            toast.error(error.message)
+          })
 
         await stores()
           .then((storesData) => {
@@ -145,7 +149,7 @@ export function SignIn() {
                     className="flex flex-col gap-2 p-2"
                     key={store.store_custom_id}
                   >
-                    <span className="capitalize text-start text-sm text-primary/60 font-extralight">
+                    <span className="text-start text-sm text-primary/60 font-extralight">
                       {store.store_custom_id}
                     </span>
                     <Button

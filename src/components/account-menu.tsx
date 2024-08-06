@@ -19,12 +19,14 @@ import useStoreState from '@/lib/data/storeState'
 export function AccountMenu() {
   const navigate = useNavigate()
 
-  const { user } = useUserState()
-  const { store } = useStoreState()
+  const { user, clearUser } = useUserState()
+  const { store, clearStore } = useStoreState()
 
   const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
     mutationFn: signOut,
     onSuccess: () => {
+      clearStore()
+      clearUser()
       navigate('/sign-in', { replace: true })
     },
   })

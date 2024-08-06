@@ -10,7 +10,6 @@ import { SaleTableRow } from './sale-table-row'
 import { SaleTableFilters } from './sale-table-filters'
 import { Pagination } from '@/components/pagination'
 import { useQuery } from '@tanstack/react-query'
-import { getOrders } from '@/api/get-orders'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { SalesTableSkeleton } from './sales-table-skeleton'
@@ -25,17 +24,6 @@ export function Sales() {
     .number()
     .transform((page) => page - 1)
     .parse(searchParams.get('page') ?? '1')
-
-  const { data: result, isLoading } = useQuery({
-    queryKey: ['orders', pageIndex, orderId, customerName, status],
-    queryFn: () =>
-      getOrders({
-        pageIndex,
-        customerName,
-        status: status === 'all' ? null : status,
-        orderId,
-      }),
-  })
 
   function handlePaginate(pageIndex: number) {
     setSearchParams((prev) => {
@@ -66,22 +54,23 @@ export function Sales() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {isLoading && <SalesTableSkeleton />}
+                <SalesTableSkeleton />
+                {/* {isLoading && <SalesTableSkeleton />}
                 {result &&
                   result.orders.map((order) => {
                     return <SaleTableRow key={order.orderId} order={order} />
-                  })}
+                  })} */}
               </TableBody>
             </Table>
           </div>
-          {result && (
+          {/* {result && (
             <Pagination
               pageIndex={result.meta.pageIndex}
               totalCount={result.meta.totalCount}
               perPage={result.meta.perPage}
               onPageChange={handlePaginate}
             />
-          )}
+          )} */}
         </div>
       </div>
     </>

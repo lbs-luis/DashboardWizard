@@ -9,12 +9,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import {  
-  useForm,
-  UseFormRegister,  
-} from 'react-hook-form'
+import { useForm, UseFormRegister } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSearchParams } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { registerProduct } from '@/api/products/register-product'
+import { toast } from 'sonner'
+import useStoreState from '@/lib/data/storeState'
+import useCurrencyInput from '@/lib/utils/useCurrency'
 
 const productFilterSchema = z.object({
   productId: z.string().optional(),
@@ -74,7 +76,7 @@ export function ProductTableButtons() {
       >
         <Input
           className="h-8 w-auto"
-          placeholder="ID do produto"
+          placeholder="Código"
           {...register('productId')}
         />
         <Input
@@ -173,16 +175,33 @@ function FiltersTab({
 }
 
 const newProductSchema = z.object({
-  product_custom_id: z.string().regex(/^[a-zA-Z0-9-_]+$/),
-  productBarCode: z.string().regex(/^[a-zA-Z0-9-_]+$/),
+  product_custom_id: z.string().regex(/^[a-zA-Z0-9-_]+$/, {
+    message: 'O código não pode conter caracteres especiais e espaços',
+  }),
+  productBarCode: z
+    .string()
+    .regex(/^\d*$/, {
+      message: 'O código de barras deve conter apenas números',
+    })
+    .optional(),
   productName: z.string(),
   productDescription: z.string().optional(),
-  productQuantity: z.number(),
+  productQuantity: z
+    .string()
+    .regex(/^\d+$/, { message: 'Quantidade deve ser um número' })
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val), {
+      message: 'Quantidade deve ser um número válido',
+    }),
 })
 
 type NewProductSchema = z.infer<typeof newProductSchema>
 
 function NewProductTab() {
+  const { mutateAsync: registerNewProduct } = useMutation({
+    mutationFn: registerProduct,
+  })
+
   const {
     register,
     handleSubmit,
@@ -191,6 +210,37 @@ function NewProductTab() {
   } = useForm<NewProductSchema>({
     resolver: zodResolver(newProductSchema),
   })
+  const { store } = useStoreState()
+
+  async function handleRegisterNewProduct(data: NewProductSchema) {
+    const {
+      productBarCode,
+      productName,
+      productQuantity,
+      product_custom_id,
+      productDescription,
+    } = data
+
+    await registerNewProduct({
+      data: {
+        product_custom_id,
+        productBarCode: productBarCode || '',
+        productDescription: productDescription || '',
+        productName,
+        productQuantity,
+        storeId: store.id,
+        productPrice: getValue(),
+      },
+    })
+      .then(() => toast.success('Novo produto cadastrado'))
+      .catch((error) => toast.error(error.message))
+  }
+
+  const {
+    value: price,
+    handleChange: handlePriceChange,
+    getValue,
+  } = useCurrencyInput()
 
   return (
     <Sheet>
@@ -204,31 +254,78 @@ function NewProductTab() {
         <SheetHeader>
           <SheetTitle className="flex justify-center items-center font-bold self-start">
             <PackagePlus className="h-6 w-6 mr-2" />
-            NOVO PRODUTO
+            Novo produto
           </SheetTitle>
         </SheetHeader>
 
-        <form className="flex flex-col items-center gap-2 mt-6">
-          <Input placeholder="Código" {...register('product_custom_id')} />
-          <Input
-            placeholder="Código de Barras"
-            {...register('productBarCode')}
-          />
-          <Input
-            className="h-10 w-full"
-            placeholder="Nome"
-            {...register('productName')}
-          />
-          <Input
-            className="h-10 w-full"
-            placeholder="Descrição"
-            {...register('productDescription')}
-          />
-          <Input
-            className="h-10 w-full"
-            placeholder="Quantidade"
-            {...register('productQuantity')}
-          />
+        <form
+          className="flex flex-col items-center gap-2 mt-6 transition-all duration-200"
+          onSubmit={handleSubmit(handleRegisterNewProduct)}
+        >
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">Código</label>
+            <Input placeholder="XX00" {...register('product_custom_id')} />
+            {errors.product_custom_id && (
+              <span className="text-left text-sm text-rose-400">
+                {errors.product_custom_id.message}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">
+              Código de Barras
+            </label>
+            <Input
+              placeholder="0000000000000"
+              {...register('productBarCode')}
+            />
+          </div>
+
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">Nome</label>
+            <Input
+              className="h-10 w-full"
+              placeholder="Nome do produto"
+              {...register('productName')}
+            />
+          </div>
+
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">
+              Descrição
+            </label>
+            <Input
+              className="h-10 w-full"
+              placeholder="Descrição do produto"
+              {...register('productDescription')}
+            />
+          </div>
+
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">
+              Quantidade
+            </label>
+            <Input
+              className="h-10 w-full"
+              placeholder="00"
+              {...register('productQuantity')}
+            />
+            {errors.productQuantity && (
+              <span className="text-left text-sm text-rose-400">
+                {errors.productQuantity.message}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col w-full gap-1">
+            <label className="text-sm text-secondary-foreground">Preço</label>
+            <Input
+              value={price}
+              onChange={handlePriceChange}
+              className="h-10 w-full"
+              placeholder="R$: 00,00"
+            />
+          </div>
 
           <div className="grid grid-cols-2 w-full gap-2 mt-2">
             <Button
@@ -241,7 +338,7 @@ function NewProductTab() {
               Limpar
             </Button>
 
-            <Button type="submit" variant="secondary" size="sm">
+            <Button type="submit" variant="default" size="sm">
               <PackagePlus className="h-4 w-4 mr-2" />
               Cadastrar
             </Button>

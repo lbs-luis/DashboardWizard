@@ -4,6 +4,7 @@ import { NavLink } from './nav-link'
 import { ModeToggle } from './theme/mode-toggle'
 import { AccountMenu } from './account-menu'
 import { NavDropDownMenu } from './nav-dropdown-menu'
+import { icons, pages } from '@/router-paths-and-icons'
 
 export function Header() {
   return (
@@ -14,18 +15,12 @@ export function Header() {
         <Separator orientation="vertical" className="h-6" />
 
         <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
-          <NavLink to="/">
-            <Home className="h-4 w-4" />
-            Início
-          </NavLink>
-          <NavLink to="/sales">
-            <PackageSearch className="h-4 w-4" />
-            Vendas
-          </NavLink>
-          <NavLink to="/products">
-            <PackageSearch className="h-4 w-4" />
-            Produtos
-          </NavLink>
+          {Object.keys(pages).map((page, i) => (
+            <NavLink to={page} key={`header-link-${i}`}>
+              {icons[page]}
+              {pages[page]}
+            </NavLink>
+          ))}
         </nav>
         <div className="md:hidden">
           <NavDropDownMenu />

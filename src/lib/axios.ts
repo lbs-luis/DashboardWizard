@@ -6,6 +6,21 @@ export const api = axios.create({
   withCredentials: true,
 })
 
+api.defaults.withCredentials = true
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken'); // Substitua com a forma que você armazena o token
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
@@ -13,9 +28,6 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (isAxiosError(error) && error?.request && error?.request?.responseText) {
       try {
-        if (error.status === 401) {
-          return Promise.reject(error);
-        }
         const errorMessage = JSON.parse(error.request.responseText).error;
         return Promise.reject(new Error(errorMessage));
       } catch (parseError) {
