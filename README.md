@@ -50,25 +50,6 @@ pnpm run dev
 ```
 <br>
 
-## DashboardWizard-api
-
-[Veja](https://github.com/luis-lbs/DashboardWizard-api) a API construida usando [Bun](https://bun.sh/) que dá vida ao Dashboard Wizard 🧙‍♂️.
-
-## 🤝 Colaboradores
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/luis-lbs" title="GitHub de Luis Felipe">
-        <img src="https://avatars.githubusercontent.com/u/53980283?v=4" width="100px;" alt="Foto do Luis Felipe no GitHub"/><br>
-        <sub>
-          <b>Luis Felipe</b>
-        </sub>
-      </a>
-    </td>
-  </tr>
-</table>
-
 ## 📝 Licença
 
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
