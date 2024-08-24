@@ -1,14 +1,17 @@
-import { getMonthRevenueAmount } from '@/api/get-month-revenue'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { useQuery } from '@tanstack/react-query'
 import { DollarSign } from 'lucide-react'
 import { MetricCardSkeleton } from './metric-card-skeleton'
 
 export function MonthRevenueCard() {
-  const { data: monthRevenueAmount } = useQuery({
-    queryFn: getMonthRevenueAmount,
-    queryKey: ['metrics', 'month-revenue-amount'],
-  })
+  // const { data: monthRevenueAmount } = useQuery({
+  //   queryFn: getMonthRevenueAmount,
+  //   queryKey: ['metrics', 'month-revenue-amount'],
+  // })
+
+  const monthRevenueAmount = {
+    receipt: 870096,
+    diffFromLastMonth: 2300.52,
+  }
 
   return (
     <Card>

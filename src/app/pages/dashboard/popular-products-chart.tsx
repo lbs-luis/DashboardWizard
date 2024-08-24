@@ -1,4 +1,4 @@
-import { getPopularProducts } from '@/api/get-popular-products'
+import { getPopularProducts } from '@/api/metrics/get-popular-products'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useQuery } from '@tanstack/react-query'
 import { BarChart, Loader2 } from 'lucide-react'
@@ -16,10 +16,18 @@ const COLORS = [
 ]
 
 export function PopularProductsChart() {
-  const { data: popularProducts } = useQuery({
-    queryKey: ['metrics', 'popular-products'],
-    queryFn: getPopularProducts,
-  })
+  // const { data: popularProducts } = useQuery({
+  //   queryKey: ['metrics', 'popular-products'],
+  //   queryFn: getPopularProducts,
+  // })
+
+  const popularProducts = [
+    { product: 'CocaCola', amount: 671 },
+    { product: 'Cerveja', amount: 432 },
+    { product: 'X-Tudo', amount: 201 },
+    { product: 'Cookie', amount: 234 },
+  ]
+
   return (
     <Card className="md:col-span-3">
       <CardHeader className="pb-3">

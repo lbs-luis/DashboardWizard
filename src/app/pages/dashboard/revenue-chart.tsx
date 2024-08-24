@@ -1,4 +1,3 @@
-import { getDailyRevenueInPeriod } from '@/api/get-daily-revenue-in-period'
 import {
   Card,
   CardContent,
@@ -8,7 +7,6 @@ import {
 } from '@/components/ui/card'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
 import { Label } from '@/components/ui/label'
-import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { subDays } from 'date-fns'
@@ -29,14 +27,21 @@ export function RevenueChart() {
     to: new Date(),
   })
 
-  const { data: dailyRevenueInPeriod } = useQuery({
-    queryKey: ['metrics', 'revenue-in-period', dateRange],
-    queryFn: () =>
-      getDailyRevenueInPeriod({
-        from: dateRange?.from,
-        to: dateRange?.to,
-      }),
-  })
+  // const { data: dailyRevenueInPeriod } = useQuery({
+  //   queryKey: ['metrics', 'revenue-in-period', dateRange],
+  //   queryFn: () =>
+  //     getDailyRevenueInPeriod({
+  //       from: dateRange?.from,
+  //       to: dateRange?.to,
+  //     }),
+  // })
+
+  const dailyRevenueInPeriod = [
+    { date: '23/01', receipt: 41483 },
+    { date: '24/01', receipt: 13050 },
+    { date: '25/01', receipt: 95731 },
+    { date: '26/01', receipt: 91005 },
+  ]
 
   const chartData = useMemo(() => {
     return dailyRevenueInPeriod?.map((chartItem) => {
