@@ -36,10 +36,34 @@ export function Orders() {
 
   const perPage = 10
 
-  const { data: InternOrders, isLoading: isLoadingIntern } = useQuery({
-    queryKey: ['orders', 'Intern', orderName],
-    queryFn: () => getOrders({ storeId: store.id, type: 'Intern' }),
-  })
+  const isLoadingIntern = false
+  const InternOrders = {
+    data: {
+      orders: [
+        {
+          items: [
+            {
+              price: 12.8,
+              id: 'TT100',
+              name: 'Coca Cola GF 350ml',
+              description: 'Coca Cola Garrafa de vidro 350ml',
+              quantity: 4,
+            },
+          ],
+          id: 'AABB2200',
+          order_custom_id: 'MESA 01',
+          status: 'Available',
+          type: 'Intern',
+          store_id: 'STORE01',
+        },
+      ] as Order[],
+    },
+  }
+
+  // const { data: InternOrders, isLoading: isLoadingIntern } = useQuery({
+  //   queryKey: ['orders', 'Intern', orderName],
+  //   queryFn: () => getOrders({ storeId: store.id, type: 'Intern' }),
+  // })
   const { data: PersonalOrders, isLoading: isLoadingPersonal } = useQuery({
     queryKey: ['orders', 'Personal', orderName],
     queryFn: () => getOrders({ storeId: store.id, type: 'Personal' }),

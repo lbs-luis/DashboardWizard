@@ -17,6 +17,15 @@ import { registerProduct } from '@/api/products/register-product'
 import { toast } from 'sonner'
 import useStoreState from '@/lib/data/storeState'
 import useCurrencyInput from '@/lib/utils/useCurrency'
+import { useState } from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { FormLabel } from '@/components/form-label'
 
 const productFilterSchema = z.object({
   productId: z.string().optional(),
@@ -212,6 +221,12 @@ function NewProductTab() {
   })
   const { store } = useStoreState()
 
+  type StatusType = 'ready' | 'to prepare'
+  const [statusType, setStatusType] = useState<StatusType>('ready')
+  function handleChangeStatusType(_statusType: StatusType) {
+    setStatusType(_statusType)
+  }
+
   async function handleRegisterNewProduct(data: NewProductSchema) {
     const {
       productBarCode,
@@ -263,7 +278,7 @@ function NewProductTab() {
           onSubmit={handleSubmit(handleRegisterNewProduct)}
         >
           <div className="flex flex-col w-full gap-1">
-            <label className="text-sm text-secondary-foreground">Código</label>
+            <FormLabel>Código</FormLabel>
             <Input placeholder="XX00" {...register('product_custom_id')} />
             {errors.product_custom_id && (
               <span className="text-left text-sm text-rose-400">
@@ -273,9 +288,7 @@ function NewProductTab() {
           </div>
 
           <div className="flex flex-col w-full gap-1">
-            <label className="text-sm text-secondary-foreground">
-              Código de Barras
-            </label>
+            <FormLabel>Código de Barras</FormLabel>
             <Input
               placeholder="0000000000000"
               {...register('productBarCode')}
@@ -292,9 +305,7 @@ function NewProductTab() {
           </div>
 
           <div className="flex flex-col w-full gap-1">
-            <label className="text-sm text-secondary-foreground">
-              Descrição
-            </label>
+            <FormLabel>Descrição</FormLabel>
             <Input
               className="h-10 w-full"
               placeholder="Descrição do produto"
@@ -303,9 +314,7 @@ function NewProductTab() {
           </div>
 
           <div className="flex flex-col w-full gap-1">
-            <label className="text-sm text-secondary-foreground">
-              Quantidade
-            </label>
+            <FormLabel>Quantidade</FormLabel>
             <Input
               className="h-10 w-full"
               placeholder="00"
@@ -318,13 +327,32 @@ function NewProductTab() {
             )}
           </div>
           <div className="flex flex-col w-full gap-1">
-            <label className="text-sm text-secondary-foreground">Preço</label>
+            <FormLabel>Preço</FormLabel>
             <Input
               value={price}
               onChange={handlePriceChange}
               className="h-10 w-full"
               placeholder="R$: 00,00"
             />
+          </div>
+          <div className="w-full">
+            <FormLabel>Disponibilidade</FormLabel>
+            <Select
+              defaultValue={statusType}
+              onValueChange={(value: StatusType) =>
+                handleChangeStatusType(value)
+              }
+            >
+              <SelectTrigger className="h-12 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ready">🟢 Pronta entrega</SelectItem>
+                <SelectItem value="to prepare">
+                  🔴 Precisa ser preparado
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 w-full gap-2 mt-2">

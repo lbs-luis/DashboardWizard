@@ -17,8 +17,14 @@ import {
 } from '@/components/ui/sheet'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select'
+import { FormLabel } from './form-label'
 
 const newOrderSchema = z.object({
   order_custom_id: z.string(),
@@ -78,9 +84,7 @@ export function SidePaperForm() {
           onSubmit={handleSubmit(handleRegisterNewOrder)}
         >
           <div className="flex flex-col w-full gap-2">
-            <label className="text-sm text-secondary-foreground font-semibold">
-              Identificador
-            </label>
+            <FormLabel>Identificador</FormLabel>
             <Input
               placeholder="nome... mesa..."
               {...register('order_custom_id')}
@@ -91,38 +95,23 @@ export function SidePaperForm() {
               </span>
             )}
           </div>
-          <div className="flex flex-col w-full gap-2">
-            <span className="text-sm text-secondary-foreground font-semibold">
-              Tipo de comanda
-            </span>
-            <RadioGroup
-              defaultValue="Intern"
-              className="flex flex-row w-full"
+          <div className="w-full">
+            <FormLabel>Tipo de Comanda</FormLabel>
+            <Select
+              defaultValue={orderType}
               onValueChange={(value: 'Intern' | 'Personal') =>
                 setOrderType(value)
               }
             >
-              <div className="flex items-center space-x-2 flex-1  border-b-2 border-transparent hover:border-primary transition-all duration-200 p-0">
-                <RadioGroupItem value="Intern" id="Option1" />
-                <Label
-                  htmlFor="Option1"
-                  className="w-full cursor-pointer py-4 h-full"
-                >
-                  Interna
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2 flex-1  border-b-2 border-transparent hover:border-primary transition-all duration-200 p-0">
-                <RadioGroupItem value="Personal" id="Option2" />
-                <Label
-                  htmlFor="Option2"
-                  className="w-full cursor-pointer py-4 h-full"
-                >
-                  Pessoal
-                </Label>
-              </div>
-            </RadioGroup>
+              <SelectTrigger className="h-12 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Intern">Interna</SelectItem>
+                <SelectItem value="Personal">Pessoal</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-
           <div className="grid grid-cols-2 w-full gap-2 mt-2">
             <Button
               type="button"
