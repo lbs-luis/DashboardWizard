@@ -8,26 +8,12 @@ import {
 import { Helmet } from 'react-helmet-async'
 import { ProductTableRow } from './product-table-row'
 import { Pagination } from '@/components/pagination'
-import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { ProductTableSkeleton } from './product-table-skeleton'
-import { getProducts } from '@/api/products/get-products'
 import { ProductTableButtons } from './product-table-buttons'
 import useStoreState from '@/lib/data/storeState'
-
-interface Product {
-  id: string
-  product_custom_id: string
-  bar_code: string
-  name: string
-  description: string
-  price: number
-  quantity: number
-  created_at: Date
-  updated_at: Date
-  store_id: string
-}
+import { Product } from '@/api/products/get-products'
 
 export function Products() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -41,11 +27,45 @@ export function Products() {
     .parse(searchParams.get('page') ?? '1')
 
   const perPage = 10
+  //MOCK
+  const isLoading = false
+  const result = {
+    data: {
+      products: [
+        {
+          id: 'TT100',
+          product_custom_id: 'TT100',
+          bar_code: '1234567890',
+          name: 'Coca Cola GF 350ml',
+          description: 'Coca Cola Garrafa de vidro 350ml',
+          price: 18.5,
+          quantity: 20,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          store_id: 'STORE01',
+          condicaoDeUso: 'ProntoUso',
+        },
+        {
+          id: 'TT200',
+          product_custom_id: 'TT200',
+          bar_code: '0987654321',
+          name: 'X-TUDO Duplo',
+          description: 'X-TUDO Hamburguer artezanal duplo 300g',
+          price: 34.87,
+          quantity: 10,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          store_id: 'STORE01',
+          condicaoDeUso: 'RequerPreparo',
+        },
+      ] as unknown as Product[],
+    },
+  }
 
-  const { data: result, isLoading } = useQuery({
-    queryKey: ['products', productId, productName],
-    queryFn: () => getProducts({ storeId: store.id }),
-  })
+  // const { data: result, isLoading } = useQuery({
+  //   queryKey: ['products', productId, productName],
+  //   queryFn: () => getProducts({ storeId: store.id }),
+  // })
 
   // Função para alterar a página
   function handlePaginate(pageIndex: number) {
@@ -89,8 +109,12 @@ export function Products() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[180px]">Código</TableHead>
-                  <TableHead className="w-[180px]">Nome</TableHead>
+                  <TableHead className="flex-1">Cód.Barras</TableHead>
+                  <TableHead className="flex-1">Nome</TableHead>
                   <TableHead className="flex-1">Descrição</TableHead>
+                  <TableHead className="w-[200px]">
+                    Tipo de Disponibilidade
+                  </TableHead>
                   <TableHead className="w-[140px] md:w-[240px]">
                     Preço
                   </TableHead>

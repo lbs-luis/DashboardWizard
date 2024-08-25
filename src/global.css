@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  -webkit-font-smoothing: antialiased; /* Para suavização no WebKit (Chrome, Safari, etc.) */
+  -moz-osx-font-smoothing: grayscale; /* Para suavização no macOS Firefox */
+  font-smooth: always; /* Alternativa padrão */
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

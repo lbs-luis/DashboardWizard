@@ -20,6 +20,7 @@ import { OrderType } from '@/api/orders/register-order'
 import { deleteOrder } from '@/api/orders/delete-order'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { QuickDataCard } from '@/components/QuickDataCard'
 
 export function Orders() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -146,25 +147,22 @@ export function Orders() {
         </h1>
         <div className="space-y-2.5">
           {!isLoadingIntern && (
-            <div className="flex flex-row gap-4 text-sm font-semibold">
-              <div className="flex flex-row items-center gap-2">
-                Comandas disponíveis:
-                <div className="bg-emerald-400 text-white px-2 py-1 rounded-md">
-                  {availableOrders()}
-                </div>
-              </div>
-              <div className="flex flex-row items-center gap-2">
-                contas pessoais abertas:
-                <div className="bg-primary text-white px-2 py-1 rounded-md">
-                  {trustedCustomerAccounts()}
-                </div>
-              </div>
-              <div className="flex flex-row items-center gap-2">
-                Comandas em aberto:
-                <div className="bg-rose-500 text-white px-2 py-1 rounded-md">
-                  {unavailableOrders()}
-                </div>
-              </div>
+            <div className="flex flex-row gap-1">
+              <QuickDataCard
+                Title="Comandas disponíveis"
+                Data={String(1)}
+                Color="text-emerald-400"
+              />
+              <QuickDataCard
+                Title="Contas pessoais abertas"
+                Data={String(0)}
+                Color="text-primary"
+              />
+              <QuickDataCard
+                Title="Comandas em aberto"
+                Data={String(0)}
+                Color="text-rose-500"
+              />
             </div>
           )}
           <OrderTableButtons />

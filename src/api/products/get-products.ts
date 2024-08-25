@@ -3,6 +3,21 @@ import { api } from '@/lib/axios'
 interface GetProducts {
   storeId: string,
 }
+
+export interface Product {
+  id: string
+  product_custom_id: string
+  bar_code: string
+  name: string
+  description: string
+  price: number
+  quantity: number
+  created_at: Date
+  updated_at: Date
+  store_id: string
+  condicaoDeUso: 'ProntoUso' | 'RequerPreparo'
+}
+
 export interface GetProductsResponse {
   products: {
     id: string;

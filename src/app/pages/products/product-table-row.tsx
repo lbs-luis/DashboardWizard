@@ -12,20 +12,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { useState } from 'react'
+import { Product } from '@/api/products/get-products'
 
 export interface ProductTableRowProps {
-  product: {
-    id: string
-    product_custom_id: string
-    bar_code: string
-    name: string
-    description: string
-    price: number
-    quantity: number
-    created_at: Date
-    updated_at: Date
-    store_id: string
-  }
+  product: Product
 }
 
 export function ProductTableRow({ product }: ProductTableRowProps) {
@@ -48,11 +38,15 @@ export function ProductTableRow({ product }: ProductTableRowProps) {
   return (
     <>
       <TableRow>
-        <TableCell className="font-mono text-xs font-medium">
+        <TableCell className="font-mono text-sm font-medium">
           {product.product_custom_id}
+        </TableCell>
+        <TableCell className="font-mono text-sm font-medium">
+          {product.bar_code}
         </TableCell>
         <TableCell className="font-medium">{product.name}</TableCell>
         <TableCell className="font-medium">{product.description}</TableCell>
+        <TableCell className="font-medium">{product.condicaoDeUso}</TableCell>
         <TableCell className="font-medium">
           {product.price.toLocaleString('pt-BR', {
             style: 'currency',
